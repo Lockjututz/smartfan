@@ -29,3 +29,6 @@ pip-delete-this-directory.txt
 
 # SQLite db
 smartfandb
+
+#temp files
+*~
