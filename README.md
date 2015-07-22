@@ -1,10 +1,7 @@
-# The Smartfan Project
+# Smartfan backend
 
-A simple DIY thermometer-controlled fan project using a DHT11, an RPI B+ and a table fan.    
-The RPI application stores and transmits sensor readings and controls the fan. 
-Data transmitted to the server is aggregated and visualised on a web site.
+Exposes a REST API with the following endpoints:
+ - storelogs: Stores an array of one or more sensor logs (time, temp, humid)
+ - getlogs: Gets sensor logs between two dates
 
-Credits:
-
- - Adafruit for the DHT-driver: https://github.com/adafruit/Adafruit_Python_DHT
- - UUGear for the DHT-driver with internal pull-up resistor: http://www.uugear.com/portfolio/dht11-humidity-temperature-sensor-module/
+Start server using the start.sh script.
