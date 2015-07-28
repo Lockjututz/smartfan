@@ -12,6 +12,9 @@ def sensorReadFailure(logs):
 def last3LogsAreOverTempLimit(last3Logs):
     return len(filter(lambda x: x["temperature"] > 24, last3Logs)) == 3
 
+def isDaytime(hour):
+    return hour > 9 and hour < 22
+
 def main():
     pool = Pool(processes=1)
     while (True):
@@ -22,13 +25,13 @@ def main():
         
         if not sensorReadFailure(logs):
             # store sensor logs locally
-            repo.storeData(logs['temp'],logs['humid'])
+            repo.storeData(logs['temp'], logs['humid'])
             
             # send logs to backend server
             pool.apply_async(backend.sendLogsToServer, [])
             
             # make fan activation decision
-            if last3LogsAreOverTempLimit(repo.getLastTrio()):
+            if isDaytime(int(time.strftime('%H'))) and last3LogsAreOverTempLimit(repo.getLastTrio()):
                 tellstick_client.activateFan()
             else:
                 tellstick_client.deactivateFan()
