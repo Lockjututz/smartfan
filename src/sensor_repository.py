@@ -19,7 +19,7 @@ def setupDBConn():
 def storeLogs(logs):
     with setupDBConn() as conn:
         with conn.cursor() as cursor:
-            args_str = ','.join(cursor.mogrify("(%(temp)s,%(humid)s,%(timestamp)s)", x) for x in logs)
+            args_str = ','.join(cursor.mogrify("(%(temperature)s,%(humidity)s,%(timestamp)s)", x) for x in logs)
             cursor.execute("INSERT INTO t_sensor_logs(temperature, humidity, timestamp) VALUES " + args_str)
 
 def getLatestLog():
