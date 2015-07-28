@@ -1,10 +1,9 @@
 import psycopg2
-from psycopg2.extras import DictCursor
+from psycopg2.extras import DictCursor, RealDictCursor
 from ConfigParser import ConfigParser
-from datetime import datetime
 from os import environ as envvar
 
-def setupDBConn(self):
+def setupDBConn():
     cfgParser = ConfigParser()
     cfgParser.read('../datasource.ini')
     addr = cfgParser.get('root', 'db.addr')
@@ -18,10 +17,19 @@ def setupDBConn(self):
     return conn
 
 def storeLogs(logs):
-    pass
+    with setupDBConn() as conn:
+        with conn.cursor() as cursor:
+            args_str = ','.join(cursor.mogrify("(%(temp)s,%(humid)s,%(timestamp)s)", x) for x in logs)
+            cursor.execute("INSERT INTO t_sensor_logs(temperature, humidity, timestamp) VALUES " + args_str)
 
 def getLatestLog():
-    pass
+    with setupDBConn() as conn:
+        with conn.cursor(cursor_factory=RealDictCursor) as cursor:
+            cursor.execute("SELECT * FROM t_sensor_logs ORDER BY id DESC LIMIT 1")
+            return cursor.fetchone()
 
 def getLogsBetween(fromDate, toDate):
-    pass
+    with setupDBConn() as conn:
+        with conn.cursor() as cursor:
+            cursor.execute("SELECT * FROM t_sensor_logs WHERE timestamp >= %s AND timestamp <= %s ORDER BY id DESC", (fromDate, toDate,))
+            return cursor.fetchall()

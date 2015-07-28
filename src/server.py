@@ -1,22 +1,41 @@
 from flask import Flask, request, render_template
-from os import environ
+import sensor_repository as repo
+import json
+
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods=['GET'])
 def index():
     #TODO return template with graphs and charts
     return render_template('index.html')
 
 @app.route("/storelogs/", methods=['POST'])
-def storelogs():
-    app.logger.debug("Storing data: %s end of data" % request.json['data'])
+def storeLogs():
+    app.logger.debug("Storing data: %s end of data" % request.json)
+    repo.storeLogs(request.json)
     return ""
 
+@app.route("/getlogs/", methods=['GET'])
+def getLogsInInterval():
+    fromDate = request.args.get('fromDate', '')
+    toDate = request.args.get('toDate', '')
+    logs = repo.getLogsBetween(fromDate, toDate)
+    return logs
+
+@app.route("/latestlog/", methods=['GET'])
+def getLatestLog():
+    return json.dumps(repo.getLatestLog())
+
 def checkForCredentials():
-    if environ['smartfandb_username'] == None or environ['smartfandb_password'] == None:
+    from os import environ
+    try:
+        if (environ['smartfandb_username'] is None or len(environ['smartfandb_username']) <= 0) \
+        or (environ['smartfandb_password'] is None or len(environ['smartfandb_password']) <= 0):
+            raise EnvironmentError('Missing OS environment variables smartfandb_username and/or smartfandb_password')
+    except KeyError:
         raise EnvironmentError('Missing OS environment variables smartfandb_username and/or smartfandb_password')
 
 if __name__ == "__main__":
     checkForCredentials()
-    app.run(port=8071,debug=True)
-#    app.run(port=8071)
+#    app.run(port=8071,debug=True)
+    app.run(port=8071)
