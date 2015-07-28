@@ -1,9 +1,11 @@
 import RPi.GPIO as GPIO
 import time
+from datetime import datetime
 
 def bin2dec(string_num):
     return str(int(string_num, 2))
 
+def readSensor():
 data = []
 
 GPIO.setmode(GPIO.BCM)
@@ -56,7 +58,7 @@ try:
 
 except:
     print "ERR_RANGE (1)"
-    exit(0)
+    return -1
 
 try:
     for i in range(0, 8):
@@ -76,13 +78,14 @@ try:
             crc = crc + "0"
 except:
     print "ERR_RANGE (2)"
-    exit(0)
+    return -2
 
 Humidity = bin2dec(HumidityBit)
 Temperature = bin2dec(TemperatureBit)
 
 if int(Humidity) + int(Temperature) - int(bin2dec(crc)) == 0:
-    print "Humidity:"+ Humidity +"%"
-    print "Temperature:"+ Temperature +"C"
+    timestamp = datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
+    return {"humid":Humidity,"temp":Temperature,"timestamp":Timestamp}
 else:
     print "ERR_CRC"
+    return -3
