@@ -1,5 +1,4 @@
 from tellcore.telldus import TelldusCore
-import time
 
 def activateFan():
     core = TelldusCore()
