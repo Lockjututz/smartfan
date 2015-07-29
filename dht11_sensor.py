@@ -57,7 +57,7 @@ def readSensor():
                     TemperatureBit = TemperatureBit + "0"
 
     except:
-        print "ERR_RANGE (1)"
+        #print "ERR_RANGE (1)"
         return -1
 
     try:
@@ -77,7 +77,7 @@ def readSensor():
             else:
                 crc = crc + "0"
     except:
-        print "ERR_RANGE (2)"
+        #print "ERR_RANGE (2)"
         return -2
 
     Humidity = bin2dec(HumidityBit)
@@ -87,5 +87,5 @@ def readSensor():
         Timestamp = datetime.fromtimestamp(time.time()).strftime('%Y-%m-%d %H:%M:%S')
         return {"humid":Humidity,"temp":Temperature,"timestamp":Timestamp}
     else:
-        print "ERR_CRC"
+        #print "ERR_CRC"
         return -3

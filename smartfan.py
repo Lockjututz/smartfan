@@ -21,6 +21,7 @@ def main():
         for i in range(5):
             logs = dht11_sensor.readSensor()
             if sensorReadFailure(logs):
+                time.sleep(2)
                 continue
         
         if not sensorReadFailure(logs):
