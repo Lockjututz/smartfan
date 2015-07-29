@@ -32,3 +32,5 @@ smartfandb
 
 #temp files
 *~
+
+*.log
