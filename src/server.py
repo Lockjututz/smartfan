@@ -1,3 +1,6 @@
+from tornado.wsgi import WSGIContainer
+from tornado.httpserver import HTTPServer
+from tornado.ioloop import IOLoop
 from flask import Flask, request, render_template
 import sensor_repository as repo
 import json
@@ -37,5 +40,10 @@ def checkForCredentials():
 
 if __name__ == "__main__":
     checkForCredentials()
+    # debug options
 #    app.run(port=8071,debug=True)
-    app.run(port=8071)
+#    app.run(port=8071)
+    http_server = HTTPServer(WSGIContainer(app))
+    http_server.listen(8071)
+    IOLoop.instance().start()
+    app.logger.info("Server running")
