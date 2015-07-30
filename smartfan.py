@@ -31,7 +31,7 @@ def main():
     pool = Pool(processes=1)
     while (True):
         try:
-            for i in range(5):
+            for i in range(10):
                 logs = dht11_sensor.readSensor()
                 if sensorReadFailure(logs):
                     time.sleep(2)
