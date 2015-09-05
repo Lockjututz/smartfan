@@ -16,7 +16,7 @@ def sensorReadFailure(logs):
     return logs == -1 or logs == -2 or logs == -3
 
 def last3LogsAreOverTempLimit(last3Logs):
-    return len(filter(lambda x: x["temperature"] > 24, last3Logs)) == 3
+    return len(filter(lambda x: x["temperature"] >= 24, last3Logs)) == 3
 
 def isDaytime(hour):
     return hour > 9 and hour < 22
