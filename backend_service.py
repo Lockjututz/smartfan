@@ -3,7 +3,7 @@
 import requests, json
 import sensor_repository as repo
 
-remote_url = "http://192.168.0.200:8071"
+remote_url = "http://192.168.0.200:8071" #TODO replace with cfg file or envvar
 
 def sendLogsToServer():
     req1 = requests.get(remote_url + "/latestlog/")
