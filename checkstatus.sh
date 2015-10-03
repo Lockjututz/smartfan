@@ -1,1 +1,1 @@
-sqlite3 smartfandb "select max(id),temperature,timestamp from t_sensor_logs;"
+sqlite3 --header smartfandb "select * from t_sensor_logs order by id desc limit 1"
